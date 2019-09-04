@@ -1,0 +1,37 @@
+{
+  "name": "ethereum-graphql-appollo",
+  "version": "1.0.0",
+  "description": "Demo to intract with ethereum(Contract) using Ethers, Query and Create Transaction using GraphQL with Apppllo Federation Server.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kamalkishorm/ethereum-graphql-appollo.git"
+  },
+  "keywords": [
+    "Ethereum",
+    "Solidity",
+    "SmartContract",
+    "Appollo",
+    "Ethers",
+    "Ethersjs",
+    "GraphQL"
+  ],
+  "devDependencies": {
+    "ethers": "latest"
+  },
+  "dependencies": {
+    "apollo-server": "^2.9.3",
+    "graphql": "^14.5.4",
+    "graphql-tools": "latest"
+  },
+  "author": "Kamal Kishor Mehra",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kamalkishorm/ethereum-graphql-appollo/issues"
+  },
+  "homepage": "https://github.com/kamalkishorm/ethereum-graphql-appollo#readme"
+}
