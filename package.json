@@ -4,7 +4,7 @@
   "description": "Demo to intract with ethereum(Contract) using Ethers, Query and Create Transaction using GraphQL with Apppllo Federation Server.",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,9 +24,13 @@
     "ethers": "latest"
   },
   "dependencies": {
+    "apollo-link-ws": "^1.0.18",
     "apollo-server": "^2.9.3",
     "graphql": "^14.5.4",
-    "graphql-tools": "latest"
+    "graphql-subscriptions": "^1.1.0",
+    "graphql-tools": "latest",
+    "nodemon": "^1.19.2",
+    "subscriptions-transport-ws": "^0.9.16"
   },
   "author": "Kamal Kishor Mehra",
   "license": "MIT",

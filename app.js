@@ -1,6 +1,7 @@
 const { ApolloServer, gql } = require('apollo-server');
 const { makeExecutableSchema } = require("graphql-tools");
-
+const PubSub = require('graphql-subscriptions').PubSub;
+const pubsub = new PubSub();
 const typeDefs = require("./schema/schema");
 const { getContract,getWallet,getProvider } = require("./contract/getContract");
 
@@ -10,19 +11,30 @@ let ethersWalletInstance =  getWallet();
 
 async function getTransactionReceipt(transactionHash){
   let response =null;
-  response = await getProvider().getTransactionReceipt(transactionHash);
-  return response;
+  await transactionHash.wait();
+  response = await getProvider().getTransactionReceipt(transactionHash.hash)
+  pubsub.publish('transactionMined', { 
+    transactionReceipt: { 
+      transactionHash: response.transactionHash, 
+      blockHash: response.blockHash,
+      blockNumber:response.blockNumber,
+      gasUsed:parseInt(response.gasUsed),
+      status:response.status 
+    }
+  });
+
+  //return response;
 }
 async function set_Greeter(message) {
   let response = null;
   let error = null;
-  await contractInstance
-        .setGreeter(message).then(res => (response = res)).catch(err => (error = err));
-  await response.wait();
-  response = await getTransactionReceipt(response.hash);
+  await contractInstance.setGreeter(message).then(res => (response = res)).catch(err => (error = err));
+  // await response.wait();
+  // response = await getTransactionReceipt(response.hash);
+  getTransactionReceipt(response);
   return response;
 }
-
+var flag =0;
 // The resolvers
 const resolvers = {
   Query: {
@@ -45,21 +57,37 @@ const resolvers = {
       const response = set_Greeter(args.message);
       await response
         .then(res => {
-          transactionHash = res.transactionHash;
-          blockHash = res.blockHash;
-          blockNumber = res.blockNumber;
-          gasUsed = res.gasUsed;
-          status = res.status;
+          transactionHash = res.hash;
+          from = res.from;
+          to = res.to;
         })
         .catch(err => console.log(err));
+
       return {
         transactionHash,
-        blockHash,
+        from,
         blockNumber,
-        gasUsed,
-        status
+        to
       };
+    },
+
+  },
+  Subscription: {
+    transactionMined: {
+      resolve: (payload) => {
+        console.log(payload);    
+        return payload.transactionReceipt;
+          },
+      subscribe: () => pubsub.asyncIterator('transactionMined')
     }
+    // commentAdded: {
+    //   resolve: (payload) => {
+    //     return {
+    //       customData: payload,
+    //     };
+    //   },
+    //   subscribe: () => pubsub.asyncIterator('commentAdded')
+    // }
   }
 };
 
