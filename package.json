@@ -29,7 +29,7 @@
     "graphql": "^14.5.4",
     "graphql-subscriptions": "^1.1.0",
     "graphql-tools": "latest",
-    "nodemon": "^1.19.2",
+    "nodemon": "^3.1.7",
     "subscriptions-transport-ws": "^0.9.16"
   },
   "author": "Kamal Kishor Mehra",
